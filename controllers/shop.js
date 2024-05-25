@@ -9,6 +9,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: 'All Products',
         path: '/products',
+        userId: req.user ? req.user._id : null,
       });
     })
     .catch(err => {
@@ -36,6 +37,7 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         pageTitle: 'Shop',
         path: '/',
+        userId: req.user ? req.user._id : null,
       });
     })
     .catch(err => {

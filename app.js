@@ -13,9 +13,6 @@ const User = require("./models/user");
 
 const MONGODB_URI = process.env.DB_CONNECTION_STRING;
 
-console.log('MONGODB_URI', MONGODB_URI);
-
-
 const app = express();
 const sessionStore = new MongoDBStore({
   uri: MONGODB_URI,
