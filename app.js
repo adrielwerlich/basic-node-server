@@ -1,5 +1,5 @@
 const path = require("path");
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -42,18 +42,26 @@ app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
-  User.findById(req.session.user._id)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => console.log(err));
+  if (req.session.user) {
+    User.findById(req.session.user._id)
+      .then((user) => {
+        req.user = user;
+        next();
+      })
+      .catch((err) => console.log(err));
+  } else if (req.originalUrl !== "/login") {
+    res.redirect("/login");
+  } else {
+    next();
+  }
 });
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
-  res.locals.errorMessage = req.flash("error")?.length ? req.flash("error")[0] : null;
+  res.locals.errorMessage = req.flash("error")?.length
+    ? req.flash("error")[0]
+    : null;
   next();
 });
 
